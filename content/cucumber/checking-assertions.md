@@ -37,20 +37,38 @@ Make sure to use the same version for `cucumber-junit` that you are using for `c
 {{% /note %}}
 
 {{% note "JUnit 5"%}}
-JUnit 5 is not supported by Cucumber.
+JUnit 5 is supported by Cucumber.
 {{% /note %}}
+
+If you are using Maven, add the following to your `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-java8</artifactId>
+    <version>4.2.0</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>5.3.1</version>
+    <scope>test</scope>
+</dependency>
+```
 
 Below is an example using `assertEquals`:
 
 ```java
-import static org.junit.Assert.*;
+import cucumber.api.java8.En;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Example {
+public class Example implements En {
 
-    @Then("^the result should be (.+)$")
-    public void the_result_should_be(String expectedResult) {
-        assertEquals(expectedResult, result);
-    }
+    public Example() {
+
+    Then("the result should be {string}", (String expectedResult) ->
+        assertEquals(expectedResult, result));
 }
 ```
 
