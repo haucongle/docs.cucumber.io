@@ -20,36 +20,28 @@ of `cucumber.api.TypeRegistryConfigurer` on the glue path.
 For instance, the following `TypeRegistryConfiguration.java` registers a `ParameterType` of type Integer, and a `DataTableType` of type ItemQuantity:
 
 ```java
+import cucumber.api.TypeRegistry;
+import cucumber.api.TypeRegistryConfigurer;
+import io.cucumber.cucumberexpressions.ParameterType;
+import io.cucumber.cucumberexpressions.Transformer;
+
+import java.util.Locale;
+
 public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
 
     @Override
     public Locale locale() {
-        return ENGLISH;
+        return Locale.ENGLISH;
     }
 
     @Override
     public void configureTypeRegistry(TypeRegistry typeRegistry) {
-        typeRegistry.defineParameterType(new ParameterType<Integer>(
-            "digit",
-            "[0-9]",
-            Integer.class,
-            new Transformer<Integer>() {
-                @Override
-                public Integer transform(String s) throws Throwable {
-                    return Integer.parseInt(s);
-                }
-            })
-        );
-
-        typeRegistry.defineDataTableType(new DataTableType(
-            ItemQuantity.class,
-            new TableCellTransformer<ItemQuantity>() {
-                @Override
-                public ItemQuantity transform(String s) {
-                    return new ItemQuantity(s);
-                }
-            })
-        );
+        typeRegistry.defineParameterType(new ParameterType<>(
+                "digit",
+                "[0-9]",
+                Integer.class,
+                (Transformer<Integer>) Integer::parseInt
+        ));
     }
 }
 ```
